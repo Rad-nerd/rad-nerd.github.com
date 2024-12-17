@@ -1,101 +1,33 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>CasaRX info</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="./bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./admin.css">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display a map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+  </style>
 </head>
 <body>
-<div class="webrx-top-container">
-    <div class="webrx-top-bar">
-        <img id="id-left-logo" height="70px" width="330px" src="http://192.168.0.193:9004/CasaRX.png">
-        
-        <div class="webrx-rx-texts openwebrx-photo-trigger">
-            <h1 class="webrx-rx-title"> 
-          </h1>
-            <div class="webrx-rx-desc"> 
-          </div>
-        </div>
-        <section class="openwebrx-main-buttons">
-            
-                <svg viewBox="0 -960 960 960"><use xlink:href=" ">
-                  </use>
-          </svg>
-          <br>
-            <div class="button" data-toggle-panel="openwebrx-panel-status">
-              <svg viewBox="0 -960 960 960">
-                <use xlink:href="../static/gfx/svg-defs.svg#panel-status">
-                </use>
-              </svg>
-              <br> 
-          </div>
-            <div class="button" data-toggle-panel="openwebrx-panel-log">
-              <svg viewBox="0 -960 960 960">
-                <use xlink:href="../static/gfx/svg-defs.svg#panel-log">
-                </use>
-              </svg>
-              <br>
-              <span id="openwebrx-chat-label"> 
-              </span>
-          </div>
-            <div class="button" data-toggle-panel="openwebrx-panel-receiver">
-              <svg viewBox="0 -960 960 960">
-                <use xlink:href="../static/gfx/svg-defs.svg#panel-receiver">
-                </use>
-              </svg>
-              <br> 
-          </div>
-            <svg viewBox="0 -960 960 960">
-              <use xlink:href="../static/gfx/svg-defs.svg#panel-map">
-              </use>
-          </svg>
-          <br>
-            <svg viewBox="0 -960 960 960">
-              <use xlink:href="../static/gfx/svg-defs.svg#panel-files">
-              </use>
-          </svg>
-          <br>
-            <svg viewBox="0 -960 960 960">
-              <use xlink:href="../static/gfx/svg-defs.svg#panel-settings">
-              </use>
-          </svg>
-          <br>
-          </section>
-          </div>
-  </div>
-          <div class="openwebrx-spectrum-container expanded" style="z-index:1;">
-          <center>
-<h1>CasaRX</h1>
-<h2>A Better Online SDR Radio For CasaOS Users</h2>
-<a href="http://homelab.net:8073">GoToYourReciver</a>&nbsp;|&nbsp;
-<a href="https://fms.komkon.org/OWRX/#Docs">Documentation</a>&nbsp;|&nbsp;
-<a href="https://fms.komkon.org/OWRX/#FAQ">FAQ</a>
-</center>
-<img>
- <div>
-  <center>
-	<p>This page is about 
-      <a href="http://homelab.net:8073" >CasaRX</a>
-      which is extended version of the normal 
-      <a href="https://fms.komkon.org/OWRX/">OpenWebRX+</a>
-      an improved and extended version of the original
-	  <a href="https://www.openwebrx.de/">OpenWebRX</a>
-	  web-based SDR radio. Since the original project is missing such 
-      necessary features as noise reduction, tuning steps, and support for 
-	  many digital modes, luarvique decided to fork it and add the features
-	  considered necessary, interesting, or simply widely requested by the 
-	  public. ( CasaRX Made By 
-      <a href="https://github.com/rad-nerd" >Rad-Nerd</a>
-      On GitHub )
-    </p>
-  </center>
- </div>
-<img>
- <center>
-	<img width="50%" src="casarxsampleimg.jpg">
- </center>
-</div>
-      </body>
+<div id="map"></div>
+</body>
+<script>
+var map = L.map('map').setView([40.23194504, -95.97166443],5);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+</script>
 </html>
