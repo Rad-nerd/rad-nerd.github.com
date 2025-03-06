@@ -3,22 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Stream</title>
+    <title>Webcam to SRT</title>
 </head>
 <body>
-    <h1>Webcam Stream</h1>
-    <video id="webcam" autoplay playsinline></video>
+    <h1>Webcam Streaming to SRT</h1>
+    <video id="localVideo" autoplay playsinline></video>
+    <button id="startButton">Start Streaming</button>
+
     <script>
-        async function startWebcam() {
+        const localVideo = document.getElementById('localVideo');
+        const startButton = document.getElementById('startButton');
+
+        let localStream;
+        let ws;
+
+        async function startStream() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true || audio: true });
-                document.getElementById('webcam').srcObject = stream;
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                localVideo.srcObject = localStream;
+
+                ws = new WebSocket("ws://localhost:8080");
+
+                ws.onopen = () => {
+                    console.log("WebSocket connected, sending video...");
+                    sendVideo();
+                };
+
+                ws.onerror = (error) => {
+                    console.error("WebSocket error:", error);
+                };
+
             } catch (error) {
                 console.error("Error accessing webcam:", error);
             }
         }
-        
-        startWebcam();
+
+        function sendVideo() {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            setInterval(() => {
+                canvas.width = localVideo.videoWidth;
+                canvas.height = localVideo.videoHeight;
+                ctx.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(blob => {
+                    if (ws.readyState === WebSocket.OPEN) {
+                        ws.send(blob);
+                    }
+                }, "image/jpeg");
+            }, 30);
+        }
+
+        startButton.addEventListener('click', startStream);
     </script>
+
+    <script type="text/python">
+        import asyncio
+        import websockets
+        import subprocess
+        import threading
+
+        SRT_URL = "srt://localhost:9998?mode=caller"
+
+        async def video_receiver(websocket, path):
+            print("Client connected, starting FFmpeg process...")
+
+            ffmpeg = subprocess.Popen([
+                "ffmpeg",
+                "-f", "image2pipe",
+                "-i", "pipe:0",
+                "-c:v", "libx264",
+                "-preset", "ultrafast",
+                "-tune", "zerolatency",
+                "-f", "mpegts",
+                SRT_URL
+            ], stdin=subprocess.PIPE)
+
+            try:
+                async for frame in websocket:
+                    ffmpeg.stdin.write(frame)
+            except websockets.exceptions.ConnectionClosed:
+                print("Client disconnected.")
+            finally:
+                ffmpeg.stdin.close()
+                ffmpeg.wait()
+
+        def run_websocket_server():
+            start_server = websockets.serve(video_receiver, "0.0.0.0", 8080)
+            asyncio.get_event_loop().run_until_complete(start_server)
+            asyncio.get_event_loop().run_forever()
+
+        threading.Thread(target=run_websocket_server, daemon=True).start()
+    </script>
+
 </body>
 </html>
