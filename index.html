@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="description" content="Webpage description goes here" />
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+
+<body>
+  
+
+  <video id="video" width="400" height="300" autoplay>?</video>
+
+
+<script>
+  (function() {
+    var video = document.getElementById('video')
+    	vendoUrl = window.URL || window.webkitURL;
+    
+    navigator.getMedia =	navigator.getUserMedia ||
+    						navigator.webkitGetUserMedia ||
+      						navigator.mozGetUserMedia ||
+      						navigator.msGetUserMedia;
+    
+    navigator.getMedia({
+    	video: true,
+    	audio:false
+    }, function(stream) {
+      	video.src = venderUrl.createObjectURL(stream);
+        video.play();
+    }, function(error) {
+      
+    });
+    
+  })();
+</script>
+
+</body>
+</html>
