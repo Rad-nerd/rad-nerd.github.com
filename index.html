@@ -3,99 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam to SRT</title>
-</head>
+    <title>Lucas' Github page</title>
+    <link rel="icon" type="image/x-icon" href="https://w7.pngwing.com/pngs/620/730/png-transparent-computer-icons-firefox-theme-icon-design-cool-miscellaneous-game-orange.png"></head>
 <body>
-    <h1>Webcam Streaming to SRT</h1>
-    <video id="localVideo" autoplay playsinline></video>
-    <button id="startButton">Start Streaming</button>
-
-    <script>
-        const localVideo = document.getElementById('localVideo');
-        const startButton = document.getElementById('startButton');
-
-        let localStream;
-        let ws;
-
-        async function startStream() {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                localVideo.srcObject = localStream;
-
-                ws = new WebSocket("ws://localhost:8080");
-
-                ws.onopen = () => {
-                    console.log("WebSocket connected, sending video...");
-                    sendVideo();
-                };
-
-                ws.onerror = (error) => {
-                    console.error("WebSocket error:", error);
-                };
-
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-            }
-        }
-
-        function sendVideo() {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-
-            setInterval(() => {
-                canvas.width = localVideo.videoWidth;
-                canvas.height = localVideo.videoHeight;
-                ctx.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
-
-                canvas.toBlob(blob => {
-                    if (ws.readyState === WebSocket.OPEN) {
-                        ws.send(blob);
-                    }
-                }, "image/jpeg");
-            }, 30);
-        }
-
-        startButton.addEventListener('click', startStream);
-    </script>
-
-    <script type="text/python">
-        import asyncio
-        import websockets
-        import subprocess
-        import threading
-
-        SRT_URL = "srt://localhost:9998?mode=caller"
-
-        async def video_receiver(websocket, path):
-            print("Client connected, starting FFmpeg process...")
-
-            ffmpeg = subprocess.Popen([
-                "ffmpeg",
-                "-f", "image2pipe",
-                "-i", "pipe:0",
-                "-c:v", "libx264",
-                "-preset", "ultrafast",
-                "-tune", "zerolatency",
-                "-f", "mpegts",
-                SRT_URL
-            ], stdin=subprocess.PIPE)
-
-            try:
-                async for frame in websocket:
-                    ffmpeg.stdin.write(frame)
-            except websockets.exceptions.ConnectionClosed:
-                print("Client disconnected.")
-            finally:
-                ffmpeg.stdin.close()
-                ffmpeg.wait()
-
-        def run_websocket_server():
-            start_server = websockets.serve(video_receiver, "0.0.0.0", 8080)
-            asyncio.get_event_loop().run_until_complete(start_server)
-            asyncio.get_event_loop().run_forever()
-
-        threading.Thread(target=run_websocket_server, daemon=True).start()
-    </script>
-
+    <h1>Welcome To Lucas' in-development webpage on github for my projects</h1>
+    <p>what do you what to do?</p>
+    <form action="https://github.com/Rad-nerd/">
+    <input type="submit" value="Go to my gihub.com page" />
+</form>
+    <form action="https://radproductionsyt.wordpress.com/">
+    <input type="submit" value="Go to the YT Channel's Official Website" />
+</form>
 </body>
 </html>
