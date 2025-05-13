@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAS Encoder</title>
+    <link rel="icon" href="favicon.ico" type="image/png">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3/build/web/hack.css">
+    <script src="https://cdn.jsdelivr.net/npm/wavefile/dist/wavefile.js"></script>
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>EAS Encoder</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#encoder-controls">Encoder Controls</a></li>
+                    <li><a href="#location-setup">Location Setup</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Version 2.0</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="container">
+                <h2 id="encoder-controls">Encoder Controls</h2>
+                <div class="form-group">
+                    <label for="events">Select EAS Event Type:</label>
+                    <select id="events">
+                        <optgroup label="Weather-Related Events">
+                            <option value="BZW">Blizzard Warning</option>
+                            <option value="CFA">Coastal Flood Watch</option>
+                            <option value="CFW">Coastal Flood Warning</option>
+                            <option value="DSW">Dust Storm Warning</option>
+                            <option value="EWW">Extreme Wind Warning</option>
+                            <option value="FFA">Flash Flood Watch</option>
+                            <option value="FFW">Flash Flood Warning</option>
+                            <option value="FFS">Flash Flood Statement</option>
+                            <option value="FLA">Flood Watch</option>
+                            <option value="FLW">Flood Warning</option>
+                            <option value="FLS">Flood Statement</option>
+                            <option value="HWA">High Wind Watch</option>
+                            <option value="HWW">High Wind Warning</option>
+                            <option value="SMW">Special Marine Warning</option>
+                            <option value="SVR">Severe Thunderstorm Warning</option>
+                            <option value="TOA">Tornado Watch</option>
+                            <option value="TOR">Tornado Warning</option>
+                            <option value="WSW">Winter Storm Warning</option>
+                        </optgroup>
+                        <optgroup label="Non-Weather-Related Events">
+                            <option value="CAE">Child Abduction Emergency</option>
+                            <option value="CDW">Civil Danger Warning</option>
+                            <option value="CEM">Civil Emergency Message</option>
+                            <option value="DMO">Practice/Demo Message</option>
+                            <option value="EAN" selected>Emergency Action Notification</option>
+                            <option value="LAE">Local Area Emergency</option>
+                            <option value="RMT">Required Monthly Test</option>
+                            <option value="RWT">Required Weekly Test</option>
+                            <option value="SPW">Shelter in Place Warning</option>
+                            <option value="TSW">Tsunami Warning</option>
+                            <option value="VOW">Volcano Warning</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="originators">Select Originator:</label>
+                    <select id="originators">
+                        <option value="EAS" selected>EAS Participant</option>
+                        <option value="CIV">Civil Authorities</option>
+                        <option value="PEP">Primary Entry Point System</option>
+                        <option value="WXR">National Weather Service</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hr">Select Hour:</label>
+                    <select id="hr">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="min">Select Minute:</label>
+                    <select id="min">
+                        <option value="0">0</option>
+                        <option value="15" selected>15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Select Time Length (HHMM):</label>
+                    <select id="time">
+                        <option value="0015" selected>00:15</option>
+                        <option value="0030">00:30</option>
+                        <option value="0045">00:45</option>
+                        <option value="0100">01:00</option>
+                        <option value="0115">01:15</option>
+                        <option value="0130">01:30</option>
+                        <option value="0145">01:45</option>
+                        <option value="0200">02:00</option>
+                        <option value="0215">02:15</option>
+                        <option value="0230">02:30</option>
+                        <option value="0245">02:45</option>
+                        <option value="0300">03:00</option>
+                        <option value="0315">03:15</option>
+                        <option value="0330">03:30</option>
+                        <option value="0345">03:45</option>
+                        <option value="0400">04:00</option>
+                        <option value="0415">04:15</option>
+                        <option value="0430">04:30</option>
+                        <option value="0445">04:45</option>
+                        <option value="0500">05:00</option>
+                        <option value="0515">05:15</option>
+                        <option value="0530">05:30</option>
+                        <option value="0545">05:45</option>
+                        <option value="0600">06:00</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="par">Sender ID (PAR):</label>
+                    <input type="text" id="par" value="SENDERID">
+                </div>
+
+                <div class="form-group">
+                    <label for="att">Attention Tone:</label>
+                    <select id="att">
+                        <option value="1" selected>NWR Attention Tone(1050hz)</option>
+                        <option value="0">EBS Attention Tones</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tlen">Attention tone time (8-25sec):</label>
+                    <input type="number" id="tlen" min="8" max="25" value="10">
+                </div>
+
+                <div class="checkbox-group form-group">
+                    <label>
+                        <input type="checkbox" id="em"> Generate Extra Marks (for SAGE encoders)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="spaces" checked> Generate Extra Spaces (for NWR encoding)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="clip" checked> Clip Signal (for authenticity)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" onchange="updateCustom(this.checked);"> Use custom SAME Header:
+                    </label>
+                    <div id="samediv" style="display:none;">
+                        <label for="cheader">Enter SAME Header here:</label>
+                        <textarea id="cheader" name="sh" placeholder="ZCZC-WXR-TOR..."></textarea>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <button onclick="generateEas();">Generate</button>
+                    <button id="play">Play Samples</button>
+                    <button id="save" style="display:none;">Save as wav file</button>
+                    <button onclick="resetStatus();" id="clr" style="display:none;">Clear Logs</button>
+                </div>
+
+                <p id="status"></p>
+
+                <h2 id="location-setup">Location Setup</h2>
+                <div class="form-group">
+                    <label for="loc">Add Location FIPS Code:</label>
+                    <input type="number" id="loc" placeholder="e.g., 000000">
+                    <button onclick="addLoc();">Add Location</button>
+                </div>
+
+                <div class="location-selectors form-group">
+                    <div>
+                        <label for="stateselect">State:</label>
+                        <select id="stateselect"></select>
+                    </div>
+                    <div>
+                        <label for="countyselect">County:</label>
+                        <select id="countyselect"></select>
+                    </div>
+                    <div>
+                        <label for="rgselect">Region:</label>
+                        <select id="rgselect"></select>
+                    </div>
+                    <button onclick="addLocs();">Add Selected Location</button>
+                </div>
+
+                <table id="fips">
+                    <tbody>
+                        <tr class="title">
+                            <td>Location</td>
+                            <td>County</td>
+                            <td>State</td>
+                            <td>Region</td>
+                            <td>FIPS Code</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="container"></tbody>
+                </table>
+            </div>
+
+            <div class="credit" id="about">
+                Credit goes to: <a href="https://github.com/nicksmadscience/eas-same-encoder">nicksmadscience same encoder python</a> and  <a href="https://github.com/Mab879/eas_encoder">Mab879 C++ same encoder</a> and <br><a href="https://github.com/CryptoDude3">CryptoDude3 for the origanal 1.0 version of this.</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="audio.js"></script>
+    <script src="utils.js"></script>
+    <script src="dec.js"></script>
+    <script src="same.js"></script>
+    <script src="alert.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
