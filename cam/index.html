@@ -4,43 +4,41 @@
     <meta charset="utf-8">
     <title>Webcam & Mic Stream</title>
     <style>
-        /* Essential styles for full-screen video */
+        /* Essential for full viewport coverage */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%
-            overflow: hidden; /* Prevent scrollbars */
-            background-color: #000; /* Black background if video isn't fully loaded */
-        }
-
-        #container {
-            position: relative; /* Establishes positioning context for children */
-            width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center; /* Center content vertically */
-            justify-content: center; /* Center content horizontally */
+            overflow: hidden; /* Prevent any scrollbars */
+            background-color: #000; /* Fallback background color */
         }
 
         #videoElement {
-            /* Make video cover the entire container (which is full screen) */
-            position: absolute;
+            /* Position video relative to the viewport */
+            position: fixed;
             top: 0;
             left: 0;
-            min-width: 90%;
-            min-height: 90%;
-            width: auto;  /* Allow natural aspect ratio */
-            height: auto; /* Allow natural aspect ratio */
-            object-fit: cover; /* Crucial: crops video to cover area while maintaining aspect ratio */
-            z-index: 1; /* Keep video in background */
-            background-color: #666; /* Placeholder background */
+            /* Make it cover 100% of the viewport */
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; /* Scale and crop to cover the area, maintaining aspect ratio */
+            z-index: 1; /* Place it in the background */
+            background-color: #666; /* Placeholder background before stream starts */
+        }
+
+        /* Container for the button - placed *above* the video */
+        #controlsContainer { /* Renamed from 'container' for clarity of purpose */
+            position: relative; /* Establishes stacking context */
+            width: 100%;
+            height: 100%;
+            display: flex; /* Use flexbox to center the button */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            z-index: 10; /* Ensure controls are above the video */
         }
 
         #micToggleButton {
-            /* Position button above the video */
-            position: relative; /* Makes z-index effective against absolute video */
-            z-index: 10; /* Ensure button is on top */
             padding: 15px 30px;
             font-size: 1.2em;
             background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for button */
@@ -48,7 +46,7 @@
             border: 2px solid white;
             cursor: pointer;
             border-radius: 8px;
-            /* Using display: none/block in JS to hide/show */
+            /* Display property will be controlled by JavaScript */
         }
 
         /* Hide the audio element controls visually, as it's just for passthrough */
@@ -58,12 +56,12 @@
     </style>
 </head>
 <body>
-    <div id="container">
+    <video autoplay="true" id="videoElement"></video>
+
+    <div id="controlsContainer">
         <button id="micToggleButton">Start Mic</button>
         
         <audio id="audioOutput" autoplay></audio>
-        
-        <video autoplay="true" id="videoElement"></video>
     </div>
 
     <script>
@@ -82,11 +80,10 @@
                 .catch(function (error) {
                     console.error('Error accessing webcam for video:', error);
                     alert('Could not access webcam for video: ' + error.message);
-                    // Optionally hide the video element or show an error message on screen
                 });
         } else {
             console.error('getUserMedia is not supported for video in this browser.');
-            alert('Your browser does not support webcam access.');
+            alert('Your browser does not support webcam access for video.');
         }
 
         // --- 2. Microphone Toggle Logic ---
@@ -120,7 +117,7 @@
                     // Listen for when the microphone stream becomes inactive unexpectedly
                     stream.oninactive = () => {
                         console.log('Microphone stream became inactive unexpectedly.');
-                        if (micStream) { // Check if it's the stream we're currently managing
+                        if (micStream) {
                             micStream.getAudioTracks().forEach(track => track.stop());
                             micStream = null;
                             audioOutput.srcObject = null;
