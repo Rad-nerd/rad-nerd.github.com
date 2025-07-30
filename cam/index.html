@@ -2,82 +2,138 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Webcam Stream</title>
+    <title>Webcam & Mic Stream</title>
     <style>
-        #videoElement {
+        /* Essential styles for full-screen video */
+        html, body {
+            margin: 0;
+            padding: 0;
             width: 100%;
-            background-color: #666;
+            height: 100%;
+            overflow: hidden; /* Prevent scrollbars */
+            background-color: #000; /* Black background if video isn't fully loaded */
+        }
+
+        #container {
+            position: relative; /* Establishes positioning context for children */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+        }
+
+        #videoElement {
+            /* Make video cover the entire container (which is full screen) */
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;  /* Allow natural aspect ratio */
+            height: auto; /* Allow natural aspect ratio */
+            object-fit: cover; /* Crucial: crops video to cover area while maintaining aspect ratio */
+            z-index: 1; /* Keep video in background */
+            background-color: #666; /* Placeholder background */
+        }
+
+        #micToggleButton {
+            /* Position button above the video */
+            position: relative; /* Makes z-index effective against absolute video */
+            z-index: 10; /* Ensure button is on top */
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for button */
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            border-radius: 8px;
+            /* Using display: none/block in JS to hide/show */
+        }
+
+        /* Hide the audio element controls visually, as it's just for passthrough */
+        #audioOutput {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div id="container">
         <button id="micToggleButton">Start Mic</button>
-    <audio id="audioOutput" autoplay></audio>
-    <video autoplay="true" id="videoElement"></video>
+        
+        <audio id="audioOutput" autoplay></audio>
+        
+        <video autoplay="true" id="videoElement"></video>
     </div>
-    <script>const video = document.getElementById('videoElement');
 
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-            video.srcObject = stream;
-        })
-        .catch(function (error) {
-            console.error('Error accessing webcam:', error);
-        });
-} else {
-    console.error('getUserMedia is not supported in this browser.');
-}
-
-</script>
-
-<script>
-        let currentStream = null;
+    <script>
+        const videoElement = document.getElementById('videoElement');
+        let micStream = null; // Renamed for clarity to distinguish from video stream
         const micToggleButton = document.getElementById('micToggleButton');
         const audioOutput = document.getElementById('audioOutput');
 
+        // --- 1. Webcam Video Stream Initialization ---
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    videoElement.srcObject = stream;
+                    console.log('Webcam video started.');
+                })
+                .catch(function (error) {
+                    console.error('Error accessing webcam for video:', error);
+                    alert('Could not access webcam for video: ' + error.message);
+                    // Optionally hide the video element or show an error message on screen
+                });
+        } else {
+            console.error('getUserMedia is not supported for video in this browser.');
+            alert('Your browser does not support webcam access.');
+        }
+
+        // --- 2. Microphone Toggle Logic ---
         micToggleButton.addEventListener('click', async () => {
-            if (currentStream) {
+            if (micStream) {
                 // If microphone is currently active, stop it
-                currentStream.getAudioTracks().forEach(track => track.stop());
-                currentStream = null;
+                micStream.getAudioTracks().forEach(track => track.stop());
+                micStream = null;
                 audioOutput.srcObject = null; // Disconnect audio output
                 micToggleButton.textContent = 'Start Mic';
+                micToggleButton.style.display = 'block'; // Make button visible
                 console.log('Microphone stopped.');
             } else {
                 // If microphone is off, start it
                 try {
-                    // --- MODIFICATION HERE: Detailed Audio Constraints ---
                     const stream = await navigator.mediaDevices.getUserMedia({
                         audio: {
                             autoGainControl: false,
                             echoCancellation: false,
                             noiseSuppression: false
                         },
-                        video: false // We still don't need video
+                        video: false // We still only need audio for this part
                     });
-                    // --- END MODIFICATION ---
 
-                    currentStream = stream;
+                    micStream = stream;
                     audioOutput.srcObject = stream;
                     micToggleButton.textContent = 'Stop Mic';
+                    micToggleButton.style.display = 'none'; // Make button go away
                     console.log('Microphone started, streaming to speakers.');
 
+                    // Listen for when the microphone stream becomes inactive unexpectedly
                     stream.oninactive = () => {
                         console.log('Microphone stream became inactive unexpectedly.');
-                        if (currentStream) {
-                            currentStream.getAudioTracks().forEach(track => track.stop());
-                            currentStream = null;
+                        if (micStream) { // Check if it's the stream we're currently managing
+                            micStream.getAudioTracks().forEach(track => track.stop());
+                            micStream = null;
                             audioOutput.srcObject = null;
                             micToggleButton.textContent = 'Start Mic';
+                            micToggleButton.style.display = 'block'; // Make button visible again
                         }
                     };
 
                 } catch (err) {
+                    // Handle errors if microphone access is denied or fails
                     console.error('Error accessing microphone:', err);
                     alert('Could not access microphone: ' + err.message + '\nPlease ensure microphone access is allowed.');
-                    micToggleButton.textContent = 'Start Mic';
+                    micToggleButton.style.display = 'block'; // Ensure button reappears on error
                 }
             }
         });
