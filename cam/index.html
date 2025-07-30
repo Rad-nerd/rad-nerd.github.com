@@ -12,97 +12,9 @@
 </head>
 <body>
     <div id="container">
-        <button id="startButton">Start Mic</button>
-    <button id="stopButton" disabled>Stop Mic</button>
-    <div id="audioOutputContainer">
-    </div>
-
-    <script>
-        let currentStream = null;
-        const startButton = document.getElementById('startButton');
-        const stopButton = document.getElementById('stopButton');
-        const statusDisplay = document.getElementById('status');
-        const audioOutputContainer = document.getElementById('audioOutputContainer');
-
-        // Function to handle successful stream acquisition
-        function handleSuccess(stream) {
-            statusDisplay.textContent = "Microphone connected! You should hear yourself.";
-            
-            // Stop any existing stream tracks
-            if (currentStream) {
-                currentStream.getAudioTracks().forEach(track => track.stop());
-            }
-            currentStream = stream; // Store the new stream
-
-            // Create or get the audio element for playback
-            let audio = document.getElementById('realtime-audio');
-            if (!audio) {
-                audio = document.createElement('audio');
-                audio.id = 'realtime-audio';
-                audio.controls = true; // Show controls (optional, but useful for debugging)
-                audio.autoplay = true; // Crucial for immediate playback
-                audioOutputContainer.appendChild(audio); // Append to a container
-            } else {
-                audio.autoplay = true; // Ensure autoplay is active
-            }
-
-            // Connect the live microphone stream directly to the audio element
-            audio.srcObject = stream;
-
-            // Handle stream ending (e.g., if user revokes permission or track is stopped)
-            stream.oninactive = function() {
-                console.log('Stream ended');
-                statusDisplay.textContent = "Microphone stream ended.";
-                startButton.disabled = false;
-                stopButton.disabled = true;
-                if (audio && audio.parentNode) {
-                    // audio.parentNode.removeChild(audio); // Optionally remove the audio element
-                }
-            };
-
-            startButton.disabled = true;
-            stopButton.disabled = false;
-        }
-
-        // Function to handle errors during stream acquisition
-        function handleError(error) {
-            console.error('Error accessing microphone:', error);
-            statusDisplay.textContent = `Error: ${error.message}. Please ensure microphone access is allowed.`;
-            startButton.disabled = false;
-            stopButton.disabled = true;
-            // alert('Error: ' + error.message + '\nPlease ensure microphone access is allowed.');
-        }
-
-        // Event listener for the Start button
-        startButton.addEventListener('click', () => {
-            statusDisplay.textContent = "Requesting microphone access...";
-            // Define constraints for getUserMedia (we only need audio)
-            const constraints = {
-                audio: true,
-                video: false
-            };
-            
-            // Request microphone access
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(handleSuccess) // If successful, pass stream to handleSuccess
-                .catch(handleError); // If error, pass error to handleError
-        });
-
-        // Event listener for the Stop button
-        stopButton.addEventListener('click', () => {
-            if (currentStream) {
-                // Stop all tracks in the current stream
-                currentStream.getAudioTracks().forEach(track => track.stop());
-                currentStream = null;
-                if (document.getElementById('realtime-audio')) {
-                    document.getElementById('realtime-audio').remove(); // Remove the audio element
-                }
-                statusDisplay.textContent = "Microphone stopped.";
-                startButton.disabled = false;
-                stopButton.disabled = true;
-            }
-        });
-    </script>        <video autoplay="true" id="videoElement"></video>
+        <button id="micToggleButton">Start Mic</button>
+    <audio id="audioOutput" autoplay></audio>
+    <video autoplay="true" id="videoElement"></video>
     </div>
     <script>const video = document.getElementById('videoElement');
 
@@ -117,6 +29,53 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 } else {
     console.error('getUserMedia is not supported in this browser.');
 }
+
 </script>
+
+<script>
+        let currentStream = null; // Stores the active MediaStream from the microphone
+        const micToggleButton = document.getElementById('micToggleButton');
+        const audioOutput = document.getElementById('audioOutput');
+
+        // Add an event listener to the button for click events
+        micToggleButton.addEventListener('click', async () => {
+            if (currentStream) {
+                // If there's an active stream, stop all its tracks
+                currentStream.getAudioTracks().forEach(track => track.stop());
+                currentStream = null; // Clear the stream reference
+                audioOutput.srcObject = null; // Disconnect the audio output
+                micToggleButton.textContent = 'Start Mic'; // Change button text
+                console.log('Microphone stopped.');
+            } else {
+                // If no active stream, request microphone access and start streaming
+                try {
+                    // Request access to the user's audio input (microphone)
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    currentStream = stream; // Store the new stream
+                    audioOutput.srcObject = stream; // Direct the live stream to the audio element
+                    micToggleButton.textContent = 'Stop Mic'; // Change button text
+                    console.log('Microphone started, streaming to speakers.');
+
+                    // Optional: Listen for when the stream becomes inactive (e.g., device disconnected)
+                    stream.oninactive = () => {
+                        console.log('Microphone stream became inactive unexpectedly.');
+                        // Clean up if the stream stops without explicit user action
+                        if (currentStream) {
+                            currentStream.getAudioTracks().forEach(track => track.stop());
+                            currentStream = null;
+                            audioOutput.srcObject = null;
+                            micToggleButton.textContent = 'Start Mic';
+                        }
+                    };
+
+                } catch (err) {
+                    // Handle errors if microphone access is denied or fails
+                    console.error('Error accessing microphone:', err);
+                    alert('Could not access microphone: ' + err.message + '\nPlease ensure microphone access is allowed.');
+                    micToggleButton.textContent = 'Start Mic'; // Reset button text on error
+                }
+            }
+        });
+    </script>
 </body>
 </html>
