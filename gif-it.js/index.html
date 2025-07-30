@@ -8,6 +8,14 @@
     <script src="gif-it.js"></script>
     <script type="text/javascript">
         FaviconAnimator.init('https://cdn.dribbble.com/userupload/19350005/file/original-3bbc2e65285f5179fb2e1900cd40b093.gif'); // your path/URL to your gif
+    
+    (function titleScroller(text) {
+        document.title = text;
+        console.log(text);
+        setTimeout(function () {
+            titleScroller(text.substr(1) + text.substr(0, 1));
+        }, 500);
+}("This is my website's title which is really long."));
     </script>
 </head>
 <body>
