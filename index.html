@@ -3,8 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAD-PRODUCTIONS Official Website</title>
+    <title>Rad-Productions-Official-Website</title>
     <link rel="icon" type="image/x-icon" href="./favicon.png">
+    <script>
+        let originalTitle = document.title; // Store the original title
+let scrollingMessage = "----"; // The message to scroll
+let fullMessage = scrollingMessage + originalTitle; // Combine for a smooth loop
+let position = 0;
+let scrollSpeed = 500; // Milliseconds per update (adjust for speed)
+
+function animateTitleScroll() {
+    // Update the title by taking a substring and re-concatenating
+    document.title = fullMessage.substring(position, fullMessage.length) + fullMessage.substring(0, position);
+
+    position++; // Move the starting point of the substring
+    if (position > fullMessage.length) {
+        position = 0; // Reset position for continuous scrolling
+    }
+
+    // Call the function again after a delay
+    setTimeout(animateTitleScroll, scrollSpeed);
+}
+
+// Start the animation when the page loads
+animateTitleScroll();
+    </script>
     <style>
         /* General Reset and Base Styles */
         * {
