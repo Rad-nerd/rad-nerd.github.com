@@ -3,81 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucas' Github page</title>
+    <title>Lucas's GitHub Projects & Profile</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://w7.pngwing.com/pngs/620/730/png-transparent-computer-icons-firefox-theme-icon-design-cool-miscellaneous-game-orange.png">
+    
     <style>
-body {
-    background-color: #a9a9bc
-    text-align:center
-}
+        /* General Styling - Dark Theme */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0d0d0d;
+            color: #ffffff;
+            /* REMOVED: text-align: center from body */
+            padding: 40px 20px;
+            line-height: 1.6;
+            text-align: left; /* Ensure all body content is left aligned by default */
+        }
+
+        /* --- Content Wrapper (Still centered on the monitor, but text flows left) --- */
+        .container {
+            max-width: 900px; /* Wider container for spacious feel */
+            margin: 0 auto; /* Keeps the container centered on the screen */
+            background: #1e1e1e; 
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
+            border-top: 5px solid #ff0000;
+            text-align: left; /* Ensure everything inside flows left */
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-weight: 700;
+            /* REMOVED: text-align: center from h1 */
+        }
+
+        /* --- Profile Section --- */
+        .profile-card {
+            background-color: #2a2a2a; 
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 40px; 
+            border-left: 3px solid #1abc9c;
+            text-align: left;
+        }
         
-.button-14 {
-  background-image: linear-gradient(#f7f8fa ,#e7e9ec);
-  border-color: #adb1b8 #a2a6ac #8d9096;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 3px;
-  box-shadow: rgba(255,255,255,.6) 0 1px 0 inset;
-  box-sizing: border-box;
-  color: #0f1111;
-  cursor: pointer;
-  display: inline-block;
-  font-family: "Amazon Ember",Arial,sans-serif;
-  font-size: 14px;
-  height: 29px;
-  font-size: 13px;
-  outline: 0;
-  overflow: hidden;
-  padding: 0 11px;
-  text-align: center;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-}
+        .profile-card p {
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
 
-.button-14:active {
-  border-bottom-color: #a2a6ac;
-}
+        .profile-card strong {
+            display: inline-block;
+            min-width: 140px;
+            color: #ff0000; 
+            font-weight: 700;
+        }
 
-.button-14:active:hover {
-  border-bottom-color: #a2a6ac;
-}
+        .email-link {
+            color: #1abc9c; 
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .email-link:hover {
+            color: #ffffff;
+        }
 
-.button-14:hover {
-  border-color: #a2a6ac #979aa1 #82858a;
-}
+        /* --- Links Section --- */
+        .links-section h2 {
+            font-size: 1.5em;
+            color: #ccc;
+            margin-bottom: 25px;
+            font-weight: 400;
+            text-align: left; /* Ensures this subtitle is left-aligned */
+        }
 
-.button-14:focus {
-  border-color: #e77600;
-  box-shadow: rgba(228, 121, 17, .5) 0 0 3px 2px;
-  outline: 0;
-}</style>
-    <link rel="icon" type="image/x-icon" href="https://w7.pngwing.com/pngs/620/730/png-transparent-computer-icons-firefox-theme-icon-design-cool-miscellaneous-game-orange.png"></head>
+        .link-group {
+            /* Changed to block layout to flow left naturally */
+            display: block; 
+            width: 100%;
+        }
+
+        .link-group div {
+            margin-bottom: 15px;
+            width: 100%;
+            /* REMOVED: display: flex; justify-content: center; */
+            text-align: left;
+        }
+
+        /* Amazon-style Button CSS (Themed) */
+        .button-14 {
+            background-image: linear-gradient(#4a4a4a, #333333); 
+            border-color: #555555;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0 inset; 
+            box-sizing: border-box;
+            color: #ffffff; 
+            cursor: pointer;
+            display: inline-block;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            height: 35px; 
+            outline: 0;
+            overflow: hidden;
+            padding: 0 15px;
+            text-decoration: none;
+            text-overflow: ellipsis;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            white-space: nowrap;
+            width: 100%;
+            max-width: 550px; /* Buttons can still be wide, but they are left-aligned now */
+            transition: background-color 0.3s;
+            font-weight: 600;
+            text-align: center; /* ONLY the button text is centered inside the button itself */
+        }
+
+        .button-14:active {
+            border-bottom-color: #555555;
+            background-color: #222;
+        }
+
+        .button-14:hover {
+            border-color: #ff0000; 
+            background-image: linear-gradient(#5a5a5a, #444444);
+        }
+
+        .button-14:focus {
+            border-color: #ff0000; 
+            box-shadow: rgba(255, 0, 0, .5) 0 0 3px 2px; 
+            outline: 0;
+        }
+    </style>
+</head>
 <body>
-    <h1>Welcome To Lucas' in-development webpage on github for my projects</h1>
-    <p>what do you what to do?</p>
-    <form action="https://github.com/Rad-nerd/"><div>
-    <input type="submit" class="button-14" value="Go to my gihub.com page" />
-</form></div><div>
-    <form action="https://Rad-nerd.github.io/">
-    <input type="submit" class="button-14" value="Go to the YT Channel's Official Website" />
-</form>
+
+    <div class="container">
+        <h1>Lucas' GitHub Projects & Profile</h1>
+        
+        <div class="profile-card">
+            <p>👋 **Hi, I’m @Rad-nerd**</p>
+            <p><strong>👀 Interested in:</strong> IT / Ham-Radio / OBS-Studio / Linux / Tornado-Sirens</p>
+            <p><strong>📫 Reach me:</strong> <a href="mailto:radtoyzandgames@gmail.com" class="email-link">radtoyzandgames@gmail.com</a></p>
+            <p><strong>⚡ Fun fact:</strong> I'm only **14**!</p>
+        </div>
+
+        <div class="links-section">
+            <h2>What project or link are you looking for?</h2>
+
+            <div class="link-group">
+                <div>
+                    <form action="https://github.com/Rad-nerd/">
+                        <input type="submit" class="button-14" value="Go to my GitHub Profile" />
+                    </form>
+                </div>
+                
+                <div>
+                    <form action="https://Rad-nerd.github.io/">
+                        <input type="submit" class="button-14" value="Go to RAD-PRODUCTIONS Official Website" />
+                    </form>
+                </div>
+                
+                <div>
+                    <form action="https://Rad-nerd.github.io/same">
+                        <input type="submit" class="button-14" value="Go to EAS Encoder V2 Project" />
+                    </form>
+                </div>
+                
+                <div>
+                    <form action="https://rad-nerd.github.io/gif-it.js/">
+                        <input type="submit" class="button-14" value="Go to gif-it.js Example Page" />
+                    </form>
+                </div>
+                
+                <div>
+                    <form action="https://rad-nerd.github.io/cam/">
+                        <input type="submit" class="button-14" value="Go to Camera Live Playback Page" />
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-    <form action="https://Rad-nerd.github.io/same">
-    <input type="submit" class="button-14" value="Go to my EAS encoder V2" />
-</form>
-    </div>
-    <div>
-    <form action="https://rad-nerd.github.io/gif-it.js/">
-    <input type="submit" class="button-14" value="Go to gif-it.js example" />
-</form>
-    </div>
-<div>
-    <form action="https://rad-nerd.github.io/cam/">
-    <input type="submit" class="button-14" value="Go to my camera live playback page" />
-</form>
-    </div></body>
+
+</body>
 </html>
