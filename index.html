@@ -338,18 +338,28 @@ animateTitleScroll();
                 font-size: 2em;
             }
         }
-        /* Blinking cursor for the typing effect */
-#typeffect {
-    border-right: 2px solid grey; /* Grey cursor bar */
-    padding-right: 5px; /* Spacing between text and cursor */
-    /* Animation for the blink */
-    animation: blink-caret .75s step-end infinite;
+        #typeffect {
+
+    border-right: 2px solid grey;
+
+    padding-right: 5px; /* Spacing between text and cursor */
+
+    /* Animation for the blink */
+
+    animation: blink-caret .75s step-end infinite;
+
 }
 
+
+
 /* Keyframes for the blinking animation */
+
 @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: grey; } /* Grey color during the blink */
+
+    from, to { border-color: transparent }
+
+    50% { border-color: grey; }
+
 }
     </style>
 </head>
