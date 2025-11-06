@@ -27,6 +27,53 @@ function animateTitleScroll() {
 
 // Start the animation when the page loads
 animateTitleScroll();
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const typeffectElement = document.getElementById('typeffect');
+
+    // Now you can add as many phrases as you like here!
+    const phrases = [
+        "Check out Lucas' personal projects and code.",
+        "Lucas will be happy if you click this!"
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    const typingSpeed = 80;
+    const erasingSpeed = 40;
+
+    const pauseAfterTyping = 5000;
+    const pauseAfterErasing = 1000;
+
+    function type() {
+        if (charIndex < phrases[phraseIndex].length) {
+            typeffectElement.textContent += phrases[phraseIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typingSpeed);
+        } else {
+            setTimeout(erase, pauseAfterTyping);
+        }
+    }
+
+    function erase() {
+        if (charIndex > 0) {
+            typeffectElement.textContent = phrases[phraseIndex].substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(erase, erasingSpeed);
+        } else {
+            // Cycle through ALL phrases
+            phraseIndex++;
+            if (phraseIndex >= phrases.length) {
+                phraseIndex = 0; // Loop back to the first phrase
+            }
+
+            setTimeout(type, pauseAfterErasing);
+        }
+    }
+
+    type();
+});
     </script>
     <style>
         /* General Reset and Base Styles */
@@ -200,8 +247,8 @@ animateTitleScroll();
         .yt-gaming { border-left-color: #ff6699; }
         .yt-enter { border-left-color: #cccccc; }
         .twitch { border-left-color: #6441a5; } 
-        .github { border-left-color: #1abc9c; } 
-        
+        .github { border-left-color: #1abc9c; }
+        .server { border-left-color: #00bc00; }        
         /* ------------------------------------- */
         /* Project Highlights Section */
         /* ------------------------------------- */
@@ -345,11 +392,17 @@ animateTitleScroll();
                         <strong>Rad Adventure Gaming Twitch</strong>
                         <span>Live streams, chat, and interactive gaming sessions.</span>
                     </a>
-                    
-                    <a href="https://rad-nerd.github.io/lucas/" class="link-card github" target="_blank">
-                        <strong>Lucas' Official Github page</strong>
-                        <span>Check out the developer's personal projects and code.</span>
+
+<a href="https://8bit-smp.fandom.com/wiki/8-Bit_SMP_Wiki"  class="link-card server" target="_blank">
+                        <strong>8-Bit SMP Wiki</strong>
+                        <span> a Wiki for Zack's minecraft server.</span>
                     </a>
+                    
+                    <a href="https://rad-nerd.github.io/lucas/"  class="link-card github" target="_blank">
+                        <strong>Lucas' Official Github page</strong>
+                        <span id="typeffect"></span>
+                    </a>
+
                 </div>
             </div>
         </section>
